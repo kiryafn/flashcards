@@ -1,5 +1,6 @@
 package tpo.language.flashcards.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tpo.language.flashcards.model.Entry;
 import tpo.language.flashcards.repository.EntryRepository;
@@ -14,13 +15,13 @@ public class FileService {
     private final String filename;
 
 
-    public FileService(EntryRepository repository, String filename) {
+    public FileService(EntryRepository repository, @Value("${pl.edu.pja.tpo02.filename}") String filename) {
         this.repository = repository;
         this.filename = filename;
     }
 
     public void loadEntries() {
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get(filename))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
@@ -29,7 +30,7 @@ public class FileService {
                 }
             }
         } catch (IOException e) {
-            System.err.println("Ошибка загрузки файла: " + e.getMessage());
+            System.err.println("File upload error: " + e.getMessage());
         }
     }
 }

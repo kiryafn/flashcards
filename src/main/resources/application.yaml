@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: FlashcardsApp
+  profiles:
+    active: default
+
+pl:
+  edu:
+    pja:
+      tpo02:
+        filename: dictionary.csv
+        displayMode: default

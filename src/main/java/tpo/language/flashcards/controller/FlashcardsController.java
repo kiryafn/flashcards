@@ -21,47 +21,46 @@ public class FlashcardsController {
     }
 
     public void addWord() {
-        System.out.print("Введите слово (польский, английский, немецкий через запятую): ");
+        System.out.print("Enter the word (Polish, English, German separated by commas): ");
         String[] parts = scanner.nextLine().split(",");
         if (parts.length == 3) {
             repository.addEntry(new Entry(parts[0].trim(), parts[1].trim(), parts[2].trim()));
-            System.out.println("Слово добавлено!");
+            System.out.println("Word added!");
         } else {
-            System.out.println("Неверный формат ввода.");
+            System.out.println("Incorrect input format.");
         }
     }
 
     public void displayWords() {
         List<Entry> entries = repository.getAllEntries();
         if (entries.isEmpty()) {
-            System.out.println("Словарь пуст.");
+            System.out.println("The dictionary is empty.");
             return;
         }
-        entries.forEach(entry ->
-                System.out.println(displayService.format(entry.toString()))
+        entries.forEach(entry -> System.out.println(displayService.format(entry.toString()))
         );
     }
 
     public void startTest() {
         List<Entry> entries = repository.getAllEntries();
         if (entries.isEmpty()) {
-            System.out.println("Нет слов для теста.");
+            System.out.println("There are no words for the test.");
             return;
         }
         Random random = new Random();
         Entry word = entries.get(random.nextInt(entries.size()));
 
-        System.out.println("Переведите слово: " + word.getPolish());
-        System.out.print("Английский: ");
+        System.out.println("Translate the word: " + word.getPolish());
+        System.out.print("English: ");
         String userEnglish = scanner.nextLine().trim().toLowerCase();
-        System.out.print("Немецкий: ");
+        System.out.print("German: ");
         String userGerman = scanner.nextLine().trim().toLowerCase();
 
         if (userEnglish.equals(word.getEnglish().toLowerCase()) &&
                 userGerman.equals(word.getGerman().toLowerCase())) {
-            System.out.println("Правильно!");
+            System.out.println("Correct!");
         } else {
-            System.out.println("Ошибка! Верный ответ: " + word.getEnglish() + ", " + word.getGerman());
+            System.out.println("Error! Correct answer: " + word.getEnglish() + ", " + word.getGerman());
         }
     }
 }
