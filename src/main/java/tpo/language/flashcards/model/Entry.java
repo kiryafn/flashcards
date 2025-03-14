@@ -18,6 +18,17 @@ public class Entry {
 
     @Override
     public String toString() {
-        return polish + " - " + english + " - " + german;
+        return polish + "," + english + "," + german;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Entry entry = (Entry) obj;
+        return (polish.equals(entry.polish)) &&
+               (english.equals(entry.english)) &&
+               (german.equals(entry.german));
+
     }
 }

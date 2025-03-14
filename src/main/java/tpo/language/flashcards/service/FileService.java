@@ -6,8 +6,7 @@ import tpo.language.flashcards.model.Entry;
 import tpo.language.flashcards.repository.EntryRepository;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+
 
 @Service
 public class FileService {
@@ -29,8 +28,19 @@ public class FileService {
                     repository.addEntry(new Entry(parts[0], parts[1], parts[2]));
                 }
             }
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found: " + filename);
         } catch (IOException e) {
-            System.err.println("File upload error: " + e.getMessage());
+            System.err.println("Error reading file " + filename + ": " + e.getMessage());
+        }
+    }
+
+    public void saveEntry(Entry entry) {
+        try (PrintWriter writer = new PrintWriter(new FileOutputStream(new File(filename), true))){
+            String words = entry.toString();
+            writer.println(words);
+        }catch (FileNotFoundException e){
+            System.err.println("File not found: " + filename);
         }
     }
 }

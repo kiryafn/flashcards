@@ -3,10 +3,11 @@ spring:
     name: FlashcardsApp
   profiles:
     active: default
+  banner:
+    location: classpath:logo-app
 
 pl:
   edu:
     pja:
       tpo02:
-        filename: dictionary.csv
-        displayMode: default
+        filename: src/main/resources/dictionary.csv

@@ -18,20 +18,20 @@ public class FlashcardsApplication {
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println("\n1. Добавить слово");
-            System.out.println("2. Показать все слова");
-            System.out.println("3. Начать тест");
-            System.out.println("4. Выход");
-            System.out.print("Выберите действие: ");
-            int choice = scanner.nextInt();
+            System.out.println("\n1. Add a word");
+            System.out.println("2. Show all words");
+            System.out.println("3. Start the test");
+            System.out.println("4. Exit");
+            System.out.print("\nChoose an action: ");
+            String choice = scanner.next();
             scanner.nextLine();
 
             switch (choice) {
-                case 1 -> controller.addWord();
-                case 2 -> controller.displayWords();
-                case 3 -> controller.startTest();
-                case 4 -> System.exit(0);
-                default -> System.out.println("Неверный выбор!");
+                case "1" -> controller.addWord();
+                case "2" -> controller.displayWords();
+                case "3" -> controller.startTest();
+                case "4" -> System.exit(0);
+                default -> System.out.println("\nWrong choice!");
             }
         }
     }
