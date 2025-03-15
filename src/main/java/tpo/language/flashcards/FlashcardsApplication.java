@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import tpo.language.flashcards.controller.FlashcardsController;
+import tpo.language.flashcards.data.Colors;
 import tpo.language.flashcards.service.FileService;
 import java.util.Scanner;
 
@@ -17,12 +18,13 @@ public class FlashcardsApplication {
         fileService.loadEntries();
 
         Scanner scanner = new Scanner(System.in);
+
         while (true) {
-            System.out.println("\n1. Add a word");
-            System.out.println("2. Show all words");
-            System.out.println("3. Start the test");
-            System.out.println("4. Exit");
-            System.out.print("\nChoose an action: ");
+            System.out.println(Colors.RED + "\n1" + Colors.RESET + ". Add a word");
+            System.out.println(Colors.YELLOW + "2" + Colors.RESET + ". Show all words");
+            System.out.println(Colors.GREEN + "3" + Colors.RESET + ". Start the test");
+            System.out.println(Colors.BLUE + "4" + Colors.RESET + ". Exit");
+            System.out.print(Colors.BOLD + "\nChoose an action: " + Colors.RESET);
             String choice = scanner.next();
             scanner.nextLine();
 

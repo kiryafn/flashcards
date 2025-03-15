@@ -1,6 +1,7 @@
 package tpo.language.flashcards.controller;
 
 import org.springframework.stereotype.Controller;
+import tpo.language.flashcards.data.Colors;
 import tpo.language.flashcards.model.Entry;
 import tpo.language.flashcards.repository.EntryRepository;
 import tpo.language.flashcards.service.DisplayService;
@@ -25,7 +26,7 @@ public class FlashcardsController {
     }
 
     public void addWord() {
-        System.out.print("Enter the word (Polish, English, German separated by commas): ");
+        System.out.print("\nEnter the word (Polish, English, German separated by commas): ");
         String[] parts = scanner.nextLine().split(",");
 
         for (int i = 0; i < parts.length; i++) {
@@ -37,15 +38,15 @@ public class FlashcardsController {
 
             for (Entry entry : repository.getAllEntries()) {
                 if (entry.equals(newEntry)) {
-                    System.out.println("The word is already in the dictionary.");
+                    System.out.println("\nThe word is already in the dictionary.");
                     return;
                 }
             }
             fileService.saveEntry(newEntry);
             repository.addEntry(newEntry);
-            System.out.println("Word added!");
+            System.out.println("\nWord added!");
         } else {
-            System.out.println("Incorrect input format.");
+            System.err.println("\nIncorrect input format.");
         }
     }
 
@@ -57,7 +58,7 @@ public class FlashcardsController {
     public void displayWords() {
         List<Entry> entries = repository.getAllEntries();
         if (entries.isEmpty()) {
-            System.out.println("The dictionary is empty.");
+            System.out.println("\nThe dictionary is empty.");
             return;
         }
 
@@ -65,7 +66,7 @@ public class FlashcardsController {
 
         System.out.println();
         System.out.printf(format, "Polish", "English", "German");
-        System.out.println("----------------------------------------------------------");
+        System.out.println(Colors.GREEN + "----------------------------------------------------------" + Colors.RESET);
 
         for (Entry entry : entries) {
             System.out.printf(format, displayService.format(entry.getPolish()), displayService.format(entry.getEnglish()), displayService.format(entry.getGerman()));
@@ -75,7 +76,7 @@ public class FlashcardsController {
     public void startTest() {
         List<Entry> entries = repository.getAllEntries();
         if (entries.isEmpty()) {
-            System.out.println("There are no words for the test.");
+            System.out.println("\nThere are no words for the test.");
             return;
         }
         Random random = new Random();
@@ -85,7 +86,7 @@ public class FlashcardsController {
 
         switch (randomLanguage) {
             case 0 -> { //Polish
-                System.out.println("Translate the word: " + word.getPolish());
+                System.out.println("\nTranslate the word from Polish: " + Colors.BOLD + word.getPolish() + Colors.RESET);
                 System.out.print("English: ");
                 String userEnglish = scanner.nextLine().trim().toLowerCase();
                 System.out.print("German: ");
@@ -93,13 +94,13 @@ public class FlashcardsController {
 
                 if (userEnglish.equals(word.getEnglish().toLowerCase()) &&
                         userGerman.equals(word.getGerman().toLowerCase())) {
-                    System.out.println("Correct!");
+                    System.out.println(Colors.BOLD + (Colors.GREEN+"\nCorrect!"+Colors.RESET) + Colors.RESET);
                 } else {
-                    System.out.println("Wrong! Correct answer: English = " + word.getEnglish() + ", German = " + word.getGerman());
+                    System.out.println("Wrong! Correct answer: English = " + Colors.BOLD + word.getEnglish() + Colors.RESET + ", German = " + Colors.BOLD + word.getGerman() + Colors.RESET);
                 }
             }
             case 1 -> { //English
-                System.out.println("\nTranslate the word: " + word.getEnglish());
+                System.out.println("\nTranslate the word from English: " + Colors.BOLD + word.getEnglish() + Colors.RESET);
                 System.out.print("Polish: ");
                 String userPolish = scanner.nextLine().trim().toLowerCase();
                 System.out.print("German: ");
@@ -107,13 +108,13 @@ public class FlashcardsController {
 
                 if (userPolish.equals(word.getPolish().toLowerCase()) &&
                         userGerman.equals(word.getGerman().toLowerCase())) {
-                    System.out.println("Correct!");
+                    System.out.println(Colors.BOLD + (Colors.GREEN+"\nCorrect!"+Colors.RESET) + Colors.RESET);
                 } else {
-                    System.out.println("Wrong! Correct answer: Polish = " + word.getPolish() + ", German = " + word.getGerman());
+                    System.out.println("Wrong! Correct answer: Polish = " + Colors.BOLD + word.getPolish() + Colors.RESET + ", German = " + Colors.BOLD + word.getGerman() + Colors.RESET);
                 }
             }
             case 2 -> { //German
-                System.out.println("Translate the word: " + word.getGerman());
+                System.out.println("Translate the word from German: " + Colors.BOLD + word.getGerman() + Colors.RESET);
                 System.out.print("Polish: ");
                 String userPolish = scanner.nextLine().trim().toLowerCase();
                 System.out.print("English: ");
@@ -121,9 +122,9 @@ public class FlashcardsController {
 
                 if (userPolish.equals(word.getPolish().toLowerCase()) &&
                         userEnglish.equals(word.getEnglish().toLowerCase())) {
-                    System.out.println("Correct!");
+                    System.out.println(Colors.BOLD + (Colors.GREEN+"\nCorrect!"+Colors.RESET) + Colors.RESET);
                 } else {
-                    System.out.println("Wrong! Correct answer: Polish = " + word.getPolish() + ", English = " + word.getEnglish());
+                    System.out.println("Wrong! Correct answer: Polish = " + Colors.BOLD + word.getPolish() + Colors.RESET + ", English = " + Colors.BOLD + word.getEnglish() + Colors.RESET);
                 }
             }
             default -> throw new IllegalStateException();
