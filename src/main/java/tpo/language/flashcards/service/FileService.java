@@ -13,7 +13,6 @@ public class FileService {
     private final EntryRepository repository;
     private final String filename;
 
-
     public FileService(EntryRepository repository, @Value("${pl.edu.pja.tpo02.filename}") String filename) {
         this.repository = repository;
         this.filename = filename;

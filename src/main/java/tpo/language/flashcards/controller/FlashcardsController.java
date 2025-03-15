@@ -17,12 +17,13 @@ public class FlashcardsController {
     private final FileService fileService;
     private final EntryRepository repository;
     private final DisplayService displayService;
-    private final Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner;
 
-    public FlashcardsController(FileService fileService, EntryRepository repository, DisplayService displayService) {
+    public FlashcardsController(FileService fileService, EntryRepository repository, DisplayService displayService, Scanner scanner) {
         this.fileService = fileService;
         this.repository = repository;
         this.displayService = displayService;
+        this.scanner = scanner;
     }
 
     public void addWord() {

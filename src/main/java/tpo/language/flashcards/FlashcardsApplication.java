@@ -14,10 +14,9 @@ public class FlashcardsApplication {
         ConfigurableApplicationContext context = SpringApplication.run(FlashcardsApplication.class, args);
         FlashcardsController controller = context.getBean(FlashcardsController.class);
         FileService fileService = context.getBean(FileService.class);
+        Scanner scanner = context.getBean(Scanner.class);
 
         fileService.loadEntries();
-
-        Scanner scanner = new Scanner(System.in);
 
         while (true) {
             System.out.println(Colors.RED + "\n1" + Colors.RESET + ". Add a word");
