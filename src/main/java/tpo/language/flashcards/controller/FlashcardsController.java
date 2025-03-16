@@ -97,7 +97,7 @@ public class FlashcardsController {
                         userGerman.equals(word.getGerman().toLowerCase())) {
                     System.out.println(Colors.BOLD + (Colors.GREEN+"\nCorrect!"+Colors.RESET) + Colors.RESET);
                 } else {
-                    System.out.println("Wrong! Correct answer: English = " + Colors.BOLD + word.getEnglish() + Colors.RESET + ", German = " + Colors.BOLD + word.getGerman() + Colors.RESET);
+                    System.out.println("\nWrong! Correct answer: English = " + Colors.BOLD + word.getEnglish() + Colors.RESET + ", German = " + Colors.BOLD + word.getGerman() + Colors.RESET);
                 }
             }
             case 1 -> { //English
@@ -111,7 +111,7 @@ public class FlashcardsController {
                         userGerman.equals(word.getGerman().toLowerCase())) {
                     System.out.println(Colors.BOLD + (Colors.GREEN+"\nCorrect!"+Colors.RESET) + Colors.RESET);
                 } else {
-                    System.out.println("Wrong! Correct answer: Polish = " + Colors.BOLD + word.getPolish() + Colors.RESET + ", German = " + Colors.BOLD + word.getGerman() + Colors.RESET);
+                    System.out.println("\nWrong! Correct answer: Polish = " + Colors.BOLD + word.getPolish() + Colors.RESET + ", German = " + Colors.BOLD + word.getGerman() + Colors.RESET);
                 }
             }
             case 2 -> { //German
@@ -125,7 +125,7 @@ public class FlashcardsController {
                         userEnglish.equals(word.getEnglish().toLowerCase())) {
                     System.out.println(Colors.BOLD + (Colors.GREEN+"\nCorrect!"+Colors.RESET) + Colors.RESET);
                 } else {
-                    System.out.println("Wrong! Correct answer: Polish = " + Colors.BOLD + word.getPolish() + Colors.RESET + ", English = " + Colors.BOLD + word.getEnglish() + Colors.RESET);
+                    System.out.println("\nWrong! Correct answer: Polish = " + Colors.BOLD + word.getPolish() + Colors.RESET + ", English = " + Colors.BOLD + word.getEnglish() + Colors.RESET);
                 }
             }
             default -> throw new IllegalStateException();
