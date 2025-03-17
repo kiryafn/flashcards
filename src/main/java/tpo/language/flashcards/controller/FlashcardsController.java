@@ -4,10 +4,9 @@ import org.springframework.stereotype.Controller;
 import tpo.language.flashcards.data.Colors;
 import tpo.language.flashcards.model.Entry;
 import tpo.language.flashcards.repository.EntryRepository;
-import tpo.language.flashcards.service.DisplayService;
+import tpo.language.flashcards.service.display.DisplayService;
 import tpo.language.flashcards.service.FileService;
 
-import java.io.FileReader;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -115,7 +114,7 @@ public class FlashcardsController {
                 }
             }
             case 2 -> { //German
-                System.out.println("Translate the word from German: " + Colors.BOLD + word.getGerman() + Colors.RESET);
+                System.out.println("\nTranslate the word from German: " + Colors.BOLD + word.getGerman() + Colors.RESET);
                 System.out.print("Polish: ");
                 String userPolish = scanner.nextLine().trim().toLowerCase();
                 System.out.print("English: ");

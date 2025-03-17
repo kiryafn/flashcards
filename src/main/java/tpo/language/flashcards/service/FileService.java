@@ -1,6 +1,9 @@
 package tpo.language.flashcards.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import tpo.language.flashcards.model.Entry;
 import tpo.language.flashcards.repository.EntryRepository;
@@ -9,11 +12,13 @@ import java.io.*;
 
 
 @Service
+@PropertySource("classpath:values.yaml")
+@ConfigurationProperties(prefix = "pl.edu.pja.tpo02")
 public class FileService {
     private final EntryRepository repository;
     private final String filename;
 
-    public FileService(EntryRepository repository, @Value("${pl.edu.pja.tpo02.filename}") String filename) {
+    public FileService(EntryRepository repository, @Value("${filename}") String filename) {
         this.repository = repository;
         this.filename = filename;
     }
