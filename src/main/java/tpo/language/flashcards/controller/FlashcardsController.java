@@ -130,4 +130,26 @@ public class FlashcardsController {
             default -> throw new IllegalStateException();
         }
     }
+
+    public void start() {
+        fileService.loadEntries();
+
+        while (true) {
+            System.out.println(Colors.RED + "\n1" + Colors.RESET + ". Add a word");
+            System.out.println(Colors.YELLOW + "2" + Colors.RESET + ". Show all words");
+            System.out.println(Colors.GREEN + "3" + Colors.RESET + ". Start the test");
+            System.out.println(Colors.BLUE + "4" + Colors.RESET + ". Exit");
+            System.out.print(Colors.BOLD + "\nChoose an action: " + Colors.RESET);
+            String choice = scanner.next();
+            scanner.nextLine();
+
+            switch (choice) {
+                case "1" -> addWord();
+                case "2" -> displayWords();
+                case "3" -> startTest();
+                case "4" -> System.exit(0);
+                default -> System.out.println("\nWrong choice!");
+            }
+        }
+    }
 }
