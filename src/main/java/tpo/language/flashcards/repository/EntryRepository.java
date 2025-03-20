@@ -46,4 +46,17 @@ public class EntryRepository {
         if (entries.isEmpty() || entries == null) return new ArrayList<>();
         return entries;
     }
+
+    public List<Entry> findAllOrdered(String fieldName, boolean ascending){
+        List<String> allowedFields = List.of("polish", "english", "german");
+
+        if (!allowedFields.contains(fieldName)) {
+            return findAll();
+        }
+
+        String direction = ascending ? "ASC" : "DESC";
+        String query = String.format("SELECT e FROM Entry e ORDER BY e.%s %s", fieldName, direction);
+
+        return entityManager.createQuery(query, Entry.class).getResultList();
+    }
 }

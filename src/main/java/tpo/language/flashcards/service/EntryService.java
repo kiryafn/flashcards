@@ -26,6 +26,10 @@ public class EntryService {
         return entryRepository.findAll();
     }
 
+    public List<Entry> findAllOrdered(String fieldName, boolean ascending) {
+       return entryRepository.findAllOrdered(fieldName, ascending);
+    }
+
     public Entry findById(Long id) throws EntryNotFoundException {
         return entryRepository.findById(id)
                 .orElseThrow(() -> new EntryNotFoundException("Entry not found with id: " + id));

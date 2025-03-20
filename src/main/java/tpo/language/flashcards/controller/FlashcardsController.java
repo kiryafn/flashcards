@@ -28,7 +28,7 @@ public class FlashcardsController {
         String[] parts = scanner.nextLine().split(",");
 
         if (parts.length != 3) {
-            System.err.println("\nIncorrect input format. Please input 3 words separated by commas.");
+            System.err.println("Incorrect input format. Please input 3 words separated by commas.\n");
             return;
         }
 
@@ -44,22 +44,49 @@ public class FlashcardsController {
         System.out.println("\nWord added!");
     }
 
+    public void deleteWord() {
+        System.out.println("\nEnter the ID of the word to delete:");
+        entryService.delete(Long.parseLong(scanner.nextLine()));
+    }
+
     public void displayWords() {
-        List<Entry> entries = entryService.findAll();
+        System.out.println("\nSelect the sorting language:\n");
+        System.out.println(Colors.RED + "1" + Colors.RESET + ". Polish");
+        System.out.println(Colors.YELLOW + "2" + Colors.RESET + ". English");
+        System.out.println(Colors.GREEN + "3" + Colors.RESET + ". German");
+        System.out.print(Colors.BOLD + "\nChoose an action (or press any other key for no sorting):" + Colors.RESET);
+
+        String languageChoice = scanner.nextLine();
+
+        switch (languageChoice) {
+            case "1" -> languageChoice = "polish";
+            case "2" -> languageChoice = "english";
+            case "3" -> languageChoice = "german";
+            default -> languageChoice = "";
+        }
+
+        System.out.println("\nSelect the sorting order:");
+        System.out.println(Colors.RED + "1" + Colors.RESET + ". Ascending");
+        System.out.println(Colors.RED + "2" + Colors.RESET + ". Descending");
+        System.out.print(Colors.BOLD + "\nChoose an action: " + Colors.RESET);
+
+        String orderChoice = scanner.nextLine();
+
+        List<Entry> entries = entryService.findAllOrdered(languageChoice,orderChoice.equals("1"));
 
         if (entries.isEmpty()) {
             System.out.println("\nThe dictionary is empty.");
             return;
         }
 
-        String format = "%-20s | %-20s | %-20s%n";
+        String format = "%-5s| %-20s | %-20s | %-20s%n";
 
         System.out.println();
-        System.out.printf(format, "Polish", "English", "German");
+        System.out.printf(format, "№", "Polish", "English", "German");
         System.out.println(Colors.GREEN + "----------------------------------------------------------" + Colors.RESET);
 
         for (Entry entry : entries) {
-            System.out.printf(format, displayService.format(entry.getPolish()), displayService.format(entry.getEnglish()), displayService.format(entry.getGerman()));
+            System.out.printf(format, entry.getId(), displayService.format(entry.getPolish()), displayService.format(entry.getEnglish()), displayService.format(entry.getGerman()));
         }
     }
 
@@ -130,18 +157,20 @@ public class FlashcardsController {
     public void start() {
         while (true) {
             System.out.println(Colors.RED + "\n1" + Colors.RESET + ". Add a word");
-            System.out.println(Colors.YELLOW + "2" + Colors.RESET + ". Show all words");
-            System.out.println(Colors.GREEN + "3" + Colors.RESET + ". Start the test");
-            System.out.println(Colors.BLUE + "4" + Colors.RESET + ". Exit");
+            System.out.println(Colors.YELLOW + "2" + Colors.RESET + ". Delete a word");
+            System.out.println(Colors.GREEN + "3" + Colors.RESET + ". Show all words");
+            System.out.println(Colors.BLUE + "4" + Colors.RESET + ". Start the test");
+            System.out.println(Colors.PURPLE + "5" + Colors.RESET + ". Exit");
             System.out.print(Colors.BOLD + "\nChoose an action: " + Colors.RESET);
             String choice = scanner.next();
             scanner.nextLine();
 
             switch (choice) {
                 case "1" -> addWord();
-                case "2" -> displayWords();
-                case "3" -> startTest();
-                case "4" -> System.exit(0);
+                case "2" -> deleteWord();
+                case "3" -> displayWords();
+                case "4" -> startTest();
+                case "5" -> System.exit(0);
                 default -> System.out.println("\nWrong choice!");
             }
         }
