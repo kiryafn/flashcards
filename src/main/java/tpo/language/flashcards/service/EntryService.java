@@ -6,11 +6,11 @@ import tpo.language.flashcards.exception.EntryNotFoundException;
 import tpo.language.flashcards.model.Entry;
 import tpo.language.flashcards.repository.EntryRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class EntryService {
-
     private final EntryRepository entryRepository;
 
     public EntryService(EntryRepository entryRepository) {
@@ -19,15 +19,28 @@ public class EntryService {
 
     public void insert(Entry entry) throws EntryAlreadyExistsException {
         validateEntry(entry);
-        entryRepository.addEntry(entry);
+        entryRepository.save(entry);
     }
 
     public List<Entry> findAll() {
-        return entryRepository.findAll();
+        List<Entry> entries = new ArrayList<>();
+        entryRepository.findAll().forEach(entries::add);
+        return entries;
     }
 
-    public List<Entry> findAllOrdered(String fieldName, boolean ascending) {
-       return entryRepository.findAllOrdered(fieldName, ascending);
+    public List<Entry> findAllByOrderByPolish(boolean ascending) {
+       if (ascending) return entryRepository.findAllByOrderByPolishAsc();
+       else return entryRepository.findAllByOrderByPolishDesc();
+    }
+
+    public List<Entry> findAllByOrderByEnglish(boolean ascending) {
+        if (ascending) return entryRepository.findAllByOrderByEnglishAsc();
+        else return entryRepository.findAllByOrderByEnglishDesc();
+    }
+
+    public List<Entry> findAllByOrderByGerman(boolean ascending) {
+        if (ascending) return entryRepository.findAllByOrderByGermanAsc();
+        else return entryRepository.findAllByOrderByGermanDesc();
     }
 
     public Entry findById(Long id) throws EntryNotFoundException {
@@ -35,17 +48,18 @@ public class EntryService {
                 .orElseThrow(() -> new EntryNotFoundException("Entry not found with id: " + id));
     }
 
-    public void delete(Long id) {
-        entryRepository.deleteById(id);
+    public void delete(Long id) throws EntryNotFoundException {
+        Entry entry = findById(id);
+        if (entry != null) entryRepository.deleteById(id);
     }
 
     public Entry update(Entry entry) throws EntryNotFoundException, EntryAlreadyExistsException {
         //validateEntry(entry);
-        return entryRepository.update(entry);
+        return entryRepository.save(entry);
     }
 
     public boolean isDuplicate(Entry entry) {
-        return entryRepository.findAll().stream()
+        return findAll().stream()
                 .anyMatch(existingEntry ->
                                 existingEntry.getPolish().equals(entry.getPolish()) &&
                                 existingEntry.getEnglish().equals(entry.getEnglish()) &&

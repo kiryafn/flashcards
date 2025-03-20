@@ -47,7 +47,12 @@ public class FlashcardsController {
 
     public void deleteWord() {
         System.out.println("\nEnter the ID of the word to delete:");
-        entryService.delete(Long.parseLong(scanner.nextLine()));
+        
+        try {
+            entryService.delete(Long.parseLong(scanner.nextLine()));
+        } catch (EntryNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void editWord() {
@@ -87,22 +92,26 @@ public class FlashcardsController {
 
         String languageChoice = scanner.nextLine();
 
-        switch (languageChoice) {
-            case "1" -> languageChoice = "polish";
-            case "2" -> languageChoice = "english";
-            case "3" -> languageChoice = "german";
-            default -> languageChoice = "";
-        }
-
         System.out.println("\nSelect the sorting order:");
-        System.out.println(Colors.RED + "1" + Colors.RESET + ". Ascending");
-        System.out.println(Colors.RED + "2" + Colors.RESET + ". Descending");
+        System.out.println(Colors.BLACK + "1" + Colors.RESET + ". Ascending");
+        System.out.println(Colors.WHITE + "2" + Colors.RESET + ". Descending");
         System.out.print(Colors.BOLD + "\nChoose an action: " + Colors.RESET);
 
         String orderChoice = scanner.nextLine();
 
-        List<Entry> entries = entryService.findAllOrdered(languageChoice,orderChoice.equals("1"));
-
+        List<Entry> entries;
+        
+        switch (languageChoice){
+            case "1" -> entries = entryService.findAllByOrderByPolish(orderChoice.equals("1"));
+            case "2" -> entries = entryService.findAllByOrderByEnglish(orderChoice.equals("1"));
+            case "3" -> entries = entryService.findAllByOrderByGerman(orderChoice.equals("1"));
+            default -> {
+                System.out.println("\nInvalid language or sorting option. Displaying unsorted list.");
+                entries = entryService.findAll();
+            }
+        }
+        
+        
         if (entries.isEmpty()) {
             System.out.println("\nThe dictionary is empty.");
             return;
