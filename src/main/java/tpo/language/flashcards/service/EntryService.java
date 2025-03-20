@@ -40,7 +40,7 @@ public class EntryService {
     }
 
     public Entry update(Entry entry) throws EntryNotFoundException, EntryAlreadyExistsException {
-        validateEntry(entry);
+        //validateEntry(entry);
         return entryRepository.update(entry);
     }
 

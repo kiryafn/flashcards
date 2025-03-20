@@ -3,6 +3,7 @@ package tpo.language.flashcards.controller;
 import org.springframework.stereotype.Controller;
 import tpo.language.flashcards.data.Colors;
 import tpo.language.flashcards.exception.EntryAlreadyExistsException;
+import tpo.language.flashcards.exception.EntryNotFoundException;
 import tpo.language.flashcards.model.Entry;
 import tpo.language.flashcards.service.EntryService;
 import tpo.language.flashcards.service.display.DisplayService;
@@ -47,6 +48,34 @@ public class FlashcardsController {
     public void deleteWord() {
         System.out.println("\nEnter the ID of the word to delete:");
         entryService.delete(Long.parseLong(scanner.nextLine()));
+    }
+
+    public void editWord() {
+        System.out.println("\nEnter the ID of the word to edit: ");
+
+        try {
+            Entry selectedEntry = entryService.findById(Long.parseLong(scanner.nextLine()));
+            System.out.println("Current polish translate: " + selectedEntry.getPolish() + ", enter a new value or just press enter to keep the old value: ");
+            String word = scanner.nextLine();
+            if (!word.isBlank()) selectedEntry.setPolish(word);
+
+            System.out.println("Current english translate: " + selectedEntry.getEnglish() + ", enter a new value or just press enter to keep the old value: ");
+            word = scanner.nextLine();
+            if (!word.isBlank()) selectedEntry.setEnglish(word);
+
+            System.out.println("Current german translate: " + selectedEntry.getGerman() + ", enter a new value or just press enter to keep the old value: ");
+            word = scanner.nextLine();
+            if (!word.isBlank()) selectedEntry.setGerman(word);
+
+            entryService.update(selectedEntry);
+
+        } catch (EntryNotFoundException e) {
+            System.err.println(e.getMessage());
+            return;
+        } catch (EntryAlreadyExistsException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public void displayWords() {
@@ -158,9 +187,10 @@ public class FlashcardsController {
         while (true) {
             System.out.println(Colors.RED + "\n1" + Colors.RESET + ". Add a word");
             System.out.println(Colors.YELLOW + "2" + Colors.RESET + ". Delete a word");
-            System.out.println(Colors.GREEN + "3" + Colors.RESET + ". Show all words");
-            System.out.println(Colors.BLUE + "4" + Colors.RESET + ". Start the test");
-            System.out.println(Colors.PURPLE + "5" + Colors.RESET + ". Exit");
+            System.out.println(Colors.GREEN + "3" + Colors.RESET + ". Edit a word");
+            System.out.println(Colors.CYAN + "4" + Colors.RESET + ". Show all words");
+            System.out.println(Colors.BLUE + "5" + Colors.RESET + ". Start the test");
+            System.out.println(Colors.PURPLE + "6" + Colors.RESET + ". Exit");
             System.out.print(Colors.BOLD + "\nChoose an action: " + Colors.RESET);
             String choice = scanner.next();
             scanner.nextLine();
@@ -168,10 +198,11 @@ public class FlashcardsController {
             switch (choice) {
                 case "1" -> addWord();
                 case "2" -> deleteWord();
-                case "3" -> displayWords();
-                case "4" -> startTest();
-                case "5" -> System.exit(0);
-                default -> System.out.println("\nWrong choice!");
+                case "3" -> editWord();
+                case "4" -> displayWords();
+                case "5" -> startTest();
+                case "6" -> System.exit(0);
+                default -> System.err.println("\nWrong choice!");
             }
         }
     }

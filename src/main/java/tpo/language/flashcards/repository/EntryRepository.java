@@ -33,11 +33,22 @@ public class EntryRepository {
     }
 
     @Transactional
-    public Entry update(Entry Entry) throws EntryNotFoundException {
-        Entry dbEntry = findById(Entry.getId()).orElseThrow(() -> new EntryNotFoundException("Entry not found"));
-        dbEntry.setEnglish(Entry.getEnglish());
-        dbEntry.setPolish(Entry.getPolish());
-        dbEntry.setGerman(Entry.getGerman());
+    public Entry update(Entry entry) throws EntryNotFoundException {
+        Entry dbEntry = findById(entry.getId())
+                .orElseThrow(() -> new EntryNotFoundException("Entry not found"));
+
+        boolean isModified = !dbEntry.getEnglish().equals(entry.getEnglish())
+                || !dbEntry.getPolish().equals(entry.getPolish())
+                || !dbEntry.getGerman().equals(entry.getGerman());
+
+        if (!isModified) {
+            return dbEntry;
+        }
+
+        dbEntry.setEnglish(entry.getEnglish());
+        dbEntry.setPolish(entry.getPolish());
+        dbEntry.setGerman(entry.getGerman());
+
         return dbEntry;
     }
 
