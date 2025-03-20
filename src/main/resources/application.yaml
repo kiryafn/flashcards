@@ -5,3 +5,18 @@ spring:
     active: default
   banner:
     location: classpath:logo-app
+  h2:
+    console:
+      path: /my-h2-console
+  datasource:
+    url: jdbc:h2:file:./db/database
+    username:
+    password:
+    driverClassName: org.h2.Driver
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+     # naming:
+       # physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl

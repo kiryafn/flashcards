@@ -2,10 +2,10 @@ package tpo.language.flashcards.controller;
 
 import org.springframework.stereotype.Controller;
 import tpo.language.flashcards.data.Colors;
+import tpo.language.flashcards.exception.EntryAlreadyExistsException;
 import tpo.language.flashcards.model.Entry;
-import tpo.language.flashcards.repository.EntryRepository;
+import tpo.language.flashcards.service.EntryService;
 import tpo.language.flashcards.service.display.DisplayService;
-import tpo.language.flashcards.service.FileService;
 
 import java.util.List;
 import java.util.Random;
@@ -13,14 +13,12 @@ import java.util.Scanner;
 
 @Controller
 public class FlashcardsController {
-    private final FileService fileService;
-    private final EntryRepository repository;
+    private final EntryService entryService;
     private final DisplayService displayService;
     private final Scanner scanner;
 
-    public FlashcardsController(FileService fileService, EntryRepository repository, DisplayService displayService, Scanner scanner) {
-        this.fileService = fileService;
-        this.repository = repository;
+    public FlashcardsController(EntryService entryService, DisplayService displayService, Scanner scanner) {
+        this.entryService = entryService;
         this.displayService = displayService;
         this.scanner = scanner;
     }
@@ -29,34 +27,26 @@ public class FlashcardsController {
         System.out.print("\nEnter the word (Polish, English, German separated by commas): ");
         String[] parts = scanner.nextLine().split(",");
 
-        for (int i = 0; i < parts.length; i++) {
-            parts[i] = capitalizeWord(parts[i].trim().toLowerCase());
+        if (parts.length != 3) {
+            System.err.println("\nIncorrect input format. Please input 3 words separated by commas.");
+            return;
         }
 
-        if (parts.length == 3) {
-            Entry newEntry = new Entry(parts[0], parts[1], parts[2]);
+        Entry entry = new Entry(formatWord(parts[0]), formatWord(parts[1]), formatWord(parts[2]));
 
-            for (Entry entry : repository.getAllEntries()) {
-                if (entry.equals(newEntry)) {
-                    System.out.println("\nThe word is already in the dictionary.");
-                    return;
-                }
-            }
-            fileService.saveEntry(newEntry);
-            repository.addEntry(newEntry);
-            System.out.println("\nWord added!");
-        } else {
-            System.err.println("\nIncorrect input format.");
+        try {
+            entryService.insert(entry);
+        } catch (EntryAlreadyExistsException e) {
+            System.out.println(e.getMessage());
+            return;
         }
-    }
 
-    private String capitalizeWord(String word) {
-        if (word == null || word.isEmpty()) return word;
-        return word.substring(0, 1).toUpperCase() + word.substring(1);
+        System.out.println("\nWord added!");
     }
 
     public void displayWords() {
-        List<Entry> entries = repository.getAllEntries();
+        List<Entry> entries = entryService.findAll();
+
         if (entries.isEmpty()) {
             System.out.println("\nThe dictionary is empty.");
             return;
@@ -74,7 +64,7 @@ public class FlashcardsController {
     }
 
     public void startTest() {
-        List<Entry> entries = repository.getAllEntries();
+        List<Entry> entries = entryService.findAll();
         if (entries.isEmpty()) {
             System.out.println("\nThere are no words for the test.");
             return;
@@ -131,9 +121,13 @@ public class FlashcardsController {
         }
     }
 
-    public void start() {
-        fileService.loadEntries();
+    private String formatWord(String word) {
+        if (word == null || word.isEmpty()) return word;
+        word = word.trim();
+        return word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase();
+    }
 
+    public void start() {
         while (true) {
             System.out.println(Colors.RED + "\n1" + Colors.RESET + ". Add a word");
             System.out.println(Colors.YELLOW + "2" + Colors.RESET + ". Show all words");

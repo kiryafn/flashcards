@@ -1,7 +1,16 @@
 package tpo.language.flashcards.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity
 public class Entry {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String polish;
     private String english;
     private String german;
@@ -12,9 +21,39 @@ public class Entry {
         this.german = german;
     }
 
-    public String getPolish() { return polish; }
-    public String getEnglish() { return english; }
-    public String getGerman() { return german; }
+    public Entry() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getPolish() {
+        return polish;
+    }
+
+    public void setPolish(String polish) {
+        this.polish = polish;
+    }
+
+    public String getEnglish() {
+        return english;
+    }
+
+    public void setEnglish(String english) {
+        this.english = english;
+    }
+
+    public String getGerman() {
+        return german;
+    }
+
+    public void setGerman(String german) {
+        this.german = german;
+    }
 
     @Override
     public String toString() {

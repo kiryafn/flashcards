@@ -1,21 +1,49 @@
 package tpo.language.flashcards.repository;
 
+import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import tpo.language.flashcards.exception.EntryNotFoundException;
 import tpo.language.flashcards.model.Entry;
 
-import java.lang.annotation.Retention;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class EntryRepository {
-    private final List<Entry> entries = new ArrayList<>();
+    private final EntityManager entityManager;
 
-    public void addEntry(Entry entry) {
-        entries.add(entry);
+    EntryRepository(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
-    public List<Entry> getAllEntries() {
+    @Transactional
+    public void addEntry(Entry entry){
+        entityManager.persist(entry);
+    }
+
+    public Optional<Entry> findById(Long id){
+        return Optional.ofNullable(entityManager.find(Entry.class, id));
+    }
+
+    @Transactional
+    public void deleteById(Long id){
+        findById(id).ifPresent(entityManager::remove);
+    }
+
+    @Transactional
+    public Entry update(Entry Entry) throws EntryNotFoundException {
+        Entry dbEntry = findById(Entry.getId()).orElseThrow(() -> new EntryNotFoundException("Entry not found"));
+        dbEntry.setEnglish(Entry.getEnglish());
+        dbEntry.setPolish(Entry.getPolish());
+        dbEntry.setGerman(Entry.getGerman());
+        return dbEntry;
+    }
+
+    public List<Entry> findAll() {
+        List<Entry> entries = entityManager.createQuery("SELECT e FROM Entry e", Entry.class).getResultList();
+        if (entries.isEmpty() || entries == null) return new ArrayList<>();
         return entries;
     }
 }
