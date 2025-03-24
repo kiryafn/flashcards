@@ -70,4 +70,15 @@ public class EntryRepository {
 
         return entityManager.createQuery(query, Entry.class).getResultList();
     }
+
+    public List<Entry> findAllByPart(String phrase) {
+        String query = "SELECT e FROM Entry e WHERE " +
+                "LOWER(e.polish) LIKE LOWER(:phrase) OR " +
+                "LOWER(e.english) LIKE LOWER(:phrase) OR " +
+                "LOWER(e.german) LIKE LOWER(:phrase)";
+
+        return entityManager.createQuery(query, Entry.class)
+                .setParameter("phrase", "%" + phrase + "%")
+                .getResultList();
+    }
 }
