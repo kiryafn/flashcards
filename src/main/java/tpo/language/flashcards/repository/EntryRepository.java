@@ -17,4 +17,10 @@ public interface EntryRepository extends CrudRepository<Entry, Long> {
 
     List<Entry> findAllByOrderByGermanAsc();
     List<Entry> findAllByOrderByGermanDesc();
+
+    //List<Entry> findAllByEnglishContainingIgnoreCase(String part);
+    //List<Entry> findAllByPolishContainingIgnoreCase(String part);
+    //List<Entry> findAllByGermanContainingIgnoreCase(String part);
+    List<Entry> findAllByPolishContainingIgnoreCaseOrEnglishContainingIgnoreCaseOrGermanContainingIgnoreCase(String polish, String english, String german);
+
 }

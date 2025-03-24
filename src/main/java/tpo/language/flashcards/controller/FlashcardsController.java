@@ -117,6 +117,22 @@ public class FlashcardsController {
             return;
         }
 
+        System.out.print("\nWould you like to filter the results by a phrase? (yes/no): ");
+        String filterChoice = scanner.nextLine().trim().toLowerCase();
+
+        if (filterChoice.equals("yes")) {
+
+            System.out.print("Enter the search phrase: ");
+            String searchPhrase = scanner.nextLine().trim();
+
+            entries = entryService.searchByPart(searchPhrase);
+        }
+
+        if (entries.isEmpty()) {
+            System.out.println("\nNo results found for the given search phrase.");
+            return;
+        }
+
         String format = "%-5s| %-20s | %-20s | %-20s%n";
 
         System.out.println();

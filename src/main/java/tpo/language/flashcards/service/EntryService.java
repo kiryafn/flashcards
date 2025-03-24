@@ -58,6 +58,10 @@ public class EntryService {
         return entryRepository.save(entry);
     }
 
+    public List<Entry> searchByPart(String part) {
+        return entryRepository.findAllByPolishContainingIgnoreCaseOrEnglishContainingIgnoreCaseOrGermanContainingIgnoreCase(part, part, part);
+    }
+
     public boolean isDuplicate(Entry entry) {
         return findAll().stream()
                 .anyMatch(existingEntry ->
