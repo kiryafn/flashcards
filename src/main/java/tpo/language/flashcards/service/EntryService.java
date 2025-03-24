@@ -67,4 +67,8 @@ public class EntryService {
             throw new IllegalArgumentException("German field cannot be null or empty");
         }
     }
+
+    public List<Entry> searchByPart(String searchPhrase) {
+        return entryRepository.findAllByPart(searchPhrase);
+    }
 }
