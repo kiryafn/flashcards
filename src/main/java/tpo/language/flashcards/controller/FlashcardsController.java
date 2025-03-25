@@ -221,7 +221,7 @@ public class FlashcardsController {
             System.out.println(Colors.YELLOW + "2" + Colors.RESET + ". Delete a word");
             System.out.println(Colors.GREEN + "3" + Colors.RESET + ". Edit a word");
             System.out.println(Colors.CYAN + "4" + Colors.RESET + ". Show all words");
-            System.out.println(Colors.BLUE + "5" + Colors.RESET + ". Search with phrase");
+            System.out.println(Colors.BLUE + "5" + Colors.RESET + ". Search by phrase");
             System.out.println(Colors.PURPLE+ "6" + Colors.RESET + ". Start the test");
             System.out.println(Colors.RED + "7" + Colors.RESET + ". Exit");
             System.out.print(Colors.BOLD + "\nChoose an action: " + Colors.RESET);
