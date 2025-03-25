@@ -71,4 +71,8 @@ public class EntryService {
     public List<Entry> searchByPart(String searchPhrase) {
         return entryRepository.findAllByPart(searchPhrase);
     }
+
+    public double countEntries() {
+        return entryRepository.countEntries();
+    }
 }

@@ -81,4 +81,8 @@ public class EntryRepository {
                 .setParameter("phrase", "%" + phrase + "%")
                 .getResultList();
     }
+
+    public double countEntries() {
+        return entityManager.createQuery("SELECT COUNT(e) FROM Entry e", Long.class).getSingleResult();
+    }
 }
