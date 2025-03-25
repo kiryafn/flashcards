@@ -85,4 +85,8 @@ public class EntryService {
             throw new IllegalArgumentException("German field cannot be null or empty");
         }
     }
+
+    public double countEntries() {
+        return entryRepository.count();
+    }
 }
