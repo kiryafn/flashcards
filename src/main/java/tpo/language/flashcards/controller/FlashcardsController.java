@@ -84,55 +84,58 @@ public class FlashcardsController {
     }
 
     public void displayWords() {
+        String languageChoice = selectSortingLanguage();
+        String orderChoice = selectSortingOrder();
+
+        List<Entry> entries = getSortedEntries(languageChoice, orderChoice);
+
+        if (entries.isEmpty()) {
+            System.out.println("\nThe dictionary is empty.");
+            return;
+        }
+        displayEntries(entries);
+    }
+
+    private String selectSortingLanguage() {
         System.out.println("\nSelect the sorting language:\n");
         System.out.println(Colors.RED + "1" + Colors.RESET + ". Polish");
         System.out.println(Colors.YELLOW + "2" + Colors.RESET + ". English");
         System.out.println(Colors.GREEN + "3" + Colors.RESET + ". German");
-        System.out.print(Colors.BOLD + "\nChoose an action (or press any other key for no sorting):" + Colors.RESET);
+        System.out.print(Colors.BOLD + "\nChoose an action (or press any other key for no sorting): " + Colors.RESET);
 
-        String languageChoice = scanner.nextLine();
+        return scanner.nextLine();
+    }
 
+    private String selectSortingOrder() {
         System.out.println("\nSelect the sorting order:");
         System.out.println(Colors.BLACK + "1" + Colors.RESET + ". Ascending");
         System.out.println(Colors.WHITE + "2" + Colors.RESET + ". Descending");
         System.out.print(Colors.BOLD + "\nChoose an action: " + Colors.RESET);
 
-        String orderChoice = scanner.nextLine();
+        return scanner.nextLine();
+    }
 
-        List<Entry> entries;
-        
-        switch (languageChoice){
-            case "1" -> entries = entryService.findAllByOrderByPolish(orderChoice.equals("1"));
-            case "2" -> entries = entryService.findAllByOrderByEnglish(orderChoice.equals("1"));
-            case "3" -> entries = entryService.findAllByOrderByGerman(orderChoice.equals("1"));
-            default -> {
+    private List<Entry> getSortedEntries(String languageChoice, String orderChoice) {
+        switch (languageChoice) {
+            case "1":
+                return entryService.findAllByOrderByPolish(orderChoice.equals("1"));
+            case "2":
+                return entryService.findAllByOrderByEnglish(orderChoice.equals("1"));
+            case "3":
+                return entryService.findAllByOrderByGerman(orderChoice.equals("1"));
+            default:
                 System.out.println("\nInvalid language or sorting option. Displaying unsorted list.");
-                entries = entryService.findAll();
-            }
+                return entryService.findAll();
         }
-        
-        
-        if (entries.isEmpty()) {
-            System.out.println("\nThe dictionary is empty.");
-            return;
-        }
+    }
 
-        System.out.print("\nWould you like to filter the results by a phrase? (yes/no): ");
-        String filterChoice = scanner.nextLine().trim().toLowerCase();
+    private void filterEntriesByPhrase() {
+        System.out.print("Enter the search phrase: ");
+        String searchPhrase = scanner.nextLine().trim();
+        displayEntries(entryService.searchByPart(searchPhrase));
+    }
 
-        if (filterChoice.equals("yes")) {
-
-            System.out.print("Enter the search phrase: ");
-            String searchPhrase = scanner.nextLine().trim();
-
-            entries = entryService.searchByPart(searchPhrase);
-        }
-
-        if (entries.isEmpty()) {
-            System.out.println("\nNo results found for the given search phrase.");
-            return;
-        }
-
+    private void displayEntries(List<Entry> entries) {
         String format = "%-5s| %-20s | %-20s | %-20s%n";
 
         System.out.println();
@@ -140,7 +143,11 @@ public class FlashcardsController {
         System.out.println(Colors.GREEN + "----------------------------------------------------------" + Colors.RESET);
 
         for (Entry entry : entries) {
-            System.out.printf(format, entry.getId(), displayService.format(entry.getPolish()), displayService.format(entry.getEnglish()), displayService.format(entry.getGerman()));
+            System.out.printf(format,
+                    entry.getId(),
+                    displayService.format(entry.getPolish()),
+                    displayService.format(entry.getEnglish()),
+                    displayService.format(entry.getGerman()));
         }
     }
 
@@ -214,8 +221,9 @@ public class FlashcardsController {
             System.out.println(Colors.YELLOW + "2" + Colors.RESET + ". Delete a word");
             System.out.println(Colors.GREEN + "3" + Colors.RESET + ". Edit a word");
             System.out.println(Colors.CYAN + "4" + Colors.RESET + ". Show all words");
-            System.out.println(Colors.BLUE + "5" + Colors.RESET + ". Start the test");
-            System.out.println(Colors.PURPLE + "6" + Colors.RESET + ". Exit");
+            System.out.println(Colors.BLUE + "5" + Colors.RESET + ". Search with phrase");
+            System.out.println(Colors.PURPLE+ "6" + Colors.RESET + ". Start the test");
+            System.out.println(Colors.RED + "7" + Colors.RESET + ". Exit");
             System.out.print(Colors.BOLD + "\nChoose an action: " + Colors.RESET);
             String choice = scanner.next();
             scanner.nextLine();
@@ -225,8 +233,9 @@ public class FlashcardsController {
                 case "2" -> deleteWord();
                 case "3" -> editWord();
                 case "4" -> displayWords();
-                case "5" -> startTest();
-                case "6" -> System.exit(0);
+                case "5" -> filterEntriesByPhrase();
+                case "6" -> startTest();
+                case "7" -> System.exit(0);
                 default -> System.err.println("\nWrong choice!");
             }
         }
